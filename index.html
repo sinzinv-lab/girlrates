@@ -35,10 +35,14 @@
   .top-buttons button:hover { transform:translateY(-3px); opacity:0.85; }
   .btn-evaluate { background-color:#2196f3; color:white; }
   .btn-history { background-color:#9c27b0; color:white; }
+  #playMusicBtn { margin-bottom:20px; padding:8px 15px; font-size:14px; border-radius:6px; border:none; background-color:#ff5722; color:#fff; cursor:pointer; transition:0.2s; }
+  #playMusicBtn:hover { background-color:#e64a19; transform:scale(1.05); }
   @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
 </style>
 </head>
 <body>
+
+<button id="playMusicBtn">Включить музыку</button>
 
 <div class="top-buttons">
   <button class="btn-evaluate" onclick="showMode('evaluate')">Оценивать</button>
@@ -108,16 +112,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const weights=[25,10,15,25,20,5];
   const criteriaNames=["Внешность","Фигура","Выкупание","Юмор","Интеллект","Хобби"];
   const music = document.getElementById('bgMusic');
-  music.volume = 0.1; // тихо
+  music.volume = 0.1;
 
   const scoresInputs=document.querySelectorAll('.score');
 
-  // Автоматическое включение музыки после первого клика на странице
-  document.body.addEventListener('click', () => {
-    if(music.paused){
-      music.play().catch(()=>{});
-    }
-  }, {once:true});
+  // Кнопка для запуска музыки
+  document.getElementById('playMusicBtn').addEventListener('click', () => {
+    music.play().catch(()=>{});
+    document.getElementById('playMusicBtn').style.display='none';
+  });
 
   function showMode(mode){
     document.getElementById('evaluateCard').classList.add('hidden');
