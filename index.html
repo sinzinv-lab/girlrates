@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оценка девушек</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #121212;
+      color: #eee;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+    .container.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .hidden { display: none; }
+    .slider-container {
+      margin: 20px 0;
+      text-align: left;
+    }
+    .slider-container label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #fff;
+    }
+    .slider-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      color: #aaa;
+    }
+    .slider-value {
+      text-align: right;
+      font-size: 14px;
+      color: #fff;
+      margin-top: 5px;
+    }
+    input[type=range] {
+      width: 100%;
+      accent-color: #4caf50;
+      transition: 0.2s;
+    }
+    input[type=range]:active {
+      transform: scale(1.05);
+    }
+    .progress-bar {
+      background-color: #333;
+      border-radius: 5px;
+      overflow: hidden;
+      margin: 5px 0;
+      height: 10px;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      transition: width 0.6s ease, background-color 0.3s ease;
+    }
+    .calculate-btn {
+      display: block;
+      margin: 25px auto;
+      padding: 18px 50px;
+      font-size: 20px;
+      font-weight: bold;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.2s, background-color 0.3s;
+    }
+    .calculate-btn:hover {
+      background-color: #43a047;
+      transform: scale(1.05);
+    }
+    #result {
+      font-size: 48px;
+      font-weight: bold;
+      margin: 30px 0;
+      padding: 20px;
+      border-radius: 12px;
+      display: inline-block;
+      min-width: 120px;
+      transition: background-color 0.3s, transform 0.3s;
+    }
+    #result.updated {
+      transform: scale(1.1);
+    }
+    .history-item {
+      background: #2a2a2a;
+      padding: 15px;
+      margin: 12px 0;
+      border-radius: 8px;
+      text-align: left;
+      animation: fadeIn 0.5s ease;
+    }
+    .history-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .top-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    .top-buttons button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, opacity 0.3s;
+    }
+    .top-buttons button:hover {
+      transform: translateY(-3px);
+      opacity: 0.85;
+    }
+    .btn-evaluate { background-color: #2196f3; color: white; }
+    .btn-history { background-color: #9c27b0; color: white; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+  <audio id="bgMusic" loop autoplay>
+  <source src="zayac-shyzi.mp3" type="audio/mpeg">
+</audio>
+
+  <div class="top-buttons">
+    <button class="btn-evaluate" onclick="showMode('evaluate')">Оценивать</button>
+    <button class="btn-history" onclick="showMode('history')">История</button>
+  </div>
+
+  <div class="container show" id="evaluateCard">
+    <input type="text" id="girlName" placeholder="Имя девушки" style="width:100%;padding:10px;border-radius:6px;border:none;margin-bottom:20px;">
+    
+    <div class="slider-container">
+      <label>Внешность</label>
+      <input type="range" min="0" max="10" step="1" value="5" class="score">
+      <div class="slider-label"><span>0</span><span>5</span><span>10</span></div>
+      <div class="slider-value">Оценка: 5</div>
+    </div>
+
+    <div class="slider-container">
+      <label>Фигура</label>
+      <input type="range" min="0" max="10" step="1" value="5" class="score">
+      <div class="slider-label"><span>0</span><span>5</span><span>10</span></div>
+      <div class="slider-value">Оценка: 5</div>
+    </div>
+
+    <div class="slider-container">
+      <label>Выкупание</label>
+      <input type="range" min="0" max="10" step="1" value="5" class="score">
+      <div class="slider-label"><span>0</span><span>5</span><span>10</span></div>
+      <div class="slider-value">Оценка: 5</div>
+    </div>
+
+    <div class="slider-container">
+      <label>Юмор</label>
+      <input type="range" min="0" max="10" step="1" value="5" class="score">
+      <div class="slider-label"><span>0</span><span>5</span><span>10</span></div>
+      <div class="slider-value">Оценка: 5</div>
+    </div>
+
+    <div class="slider-container">
+      <label>Интеллект</label>
+      <input type="range" min="0" max="10" step="1" value="5" class="score">
+      <div class="slider-label"><span>0</span><span>5</span><span>10</span></div>
+      <div class="slider-value">Оценка: 5</div>
+    </div>
+
+    <div class="slider-container">
+      <label>Хобби</label>
+      <input type="range" min="0" max="10" step="1" value="5" class="score">
+      <div class="slider-label"><span>0</span><span>5</span><span>10</span></div>
+      <div class="slider-value">Оценка: 5</div>
+    </div>
+
+    <button class="calculate-btn" onclick="addGirl()">Посчитать</button>
+    <div id="result">0.00</div>
+  </div>
+
+  <div class="container hidden" id="historyCard">
+    <h2>История оценок</h2>
+    <div id="historyList"></div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const weights=[25,10,15,25,20,5];
+  const criteriaNames=["Внешность","Фигура","Выкупание","Юмор","Интеллект","Хобби"];
+  const music=document.getElementById('bgMusic');
+  music.volume=0.1;
+  music.play().catch(()=>{});
+
+  const scoresInputs=document.querySelectorAll('.score');
+
+  function showMode(mode){
+    document.getElementById('evaluateCard').classList.add('hidden');
+    document.getElementById('historyCard').classList.add('hidden');
+    document.getElementById('evaluateCard').classList.remove('show');
+    document.getElementById('historyCard').classList.remove('show');
+    if(mode==='evaluate') {
+      document.getElementById('evaluateCard').classList.remove('hidden');
+      setTimeout(()=>document.getElementById('evaluateCard').classList.add('show'),10);
+    }
+    if(mode==='history'){
+      document.getElementById('historyCard').classList.remove('hidden');
+      setTimeout(()=>document.getElementById('historyCard').classList.add('show'),10);
+      loadHistory();
+    }
+  }
+
+  function calculateScore(scores){
+    let sum=0;
+    for(let i=0;i<scores.length;i++) sum+=scores[i]*weights[i];
+    return Math.min(sum/100,10);
+  }
+
+  function colorByValue(value){
+    if(value<=3.5) return "#b71c1c";
+    if(value<=6) return "#fbc02d";
+    return "#388e3c";
+  }
+
+  function updateLiveBars(){
+    const scores=Array.from(scoresInputs).map(i=>parseFloat(i.value));
+    const totalScore=calculateScore(scores);
+    const res=document.getElementById('result');
+    res.textContent=totalScore.toFixed(2);
+    res.style.backgroundColor=colorByValue(totalScore);
+    res.style.color=totalScore<=6?'#000':'#fff';
+    res.classList.add('updated');
+    setTimeout(()=>res.classList.remove('updated'),300);
+  }
+
+  scoresInputs.forEach(inp=>{
+    const valueBox=inp.parentElement.querySelector('.slider-value');
+    valueBox.textContent="Оценка: "+inp.value;
+    inp.addEventListener('input',()=>{
+      valueBox.textContent="Оценка: "+inp.value;
+      updateLiveBars();
+    });
+  });
+
+  function addGirl(){
+    const name=document.getElementById('girlName').value.trim();
+    if(!name) return alert("Введите имя");
+    const scores=Array.from(scoresInputs).map(i=>parseFloat(i.value));
+    const score=calculateScore(scores);
+    let girls=JSON.parse(localStorage.getItem('girls')||'[]');
+    girls.push({name,score,scores});
+    localStorage.setItem('girls',JSON.stringify(girls));
+    document.getElementById('girlName').value='';
+    updateLiveBars();
+  }
+
+  function loadHistory(){
+    const list=document.getElementById('historyList');
+    list.innerHTML='';
+    const girls=JSON.parse(localStorage.getItem('girls')||'[]');
+    girls.forEach((g,i)=>{
+      const div=document.createElement('div');
+      div.className='history-item';
+      const scoreColor=colorByValue(g.score);
+      let barsHTML='';
+      g.scores.forEach((s, idx)=>{
+        barsHTML+=`
+          <div style="margin:8px 0;">
+            <span style="font-size:13px;color:#aaa;">${criteriaNames[idx]}: ${s}</span>
+            <div class="progress-bar">
+              <div class="progress-bar-fill" style="width:${s/10*100}%;background-color:${colorByValue(s)}"></div>
+            </div>
+          </div>`;
+      });
+      div.innerHTML=`
+        <div class="history-header">
+          <span>${g.name}</span>
+          <span style="font-weight:bold;color:white;background-color:${scoreColor};padding:5px 12px;border-radius:6px;">${g.score.toFixed(2)}</span>
+          <button onclick="deleteGirl(${i})" style="margin-left:10px;background-color:#b71c1c;color:#fff;padding:5px 10px;border:none;border-radius:6px;cursor:pointer;">Удалить</button>
+        </div>
+        ${barsHTML}
+      `;
+      list.appendChild(div);
+    });
+  }
+
+  function deleteGirl(index){
+    let girls=JSON.parse(localStorage.getItem('girls')||'[]');
+    girls.splice(index,1);
+    localStorage.setItem('girls',JSON.stringify(girls));
+    loadHistory();
+  }
+
+  updateLiveBars();
+  window.showMode=showMode;
+  window.addGirl=addGirl;
+  window.deleteGirl=deleteGirl;
+});
+</script>
+</body>
+</html>
